@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính Tiền Điện EVN</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('dai_hoc.png'); /* Ảnh nền */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            text-align: center;
+            margin: 50px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            position: relative;
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2ecc71;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Web của Huấn</div>
+    <div class="container">
+       <img src="evn_logo.png" alt="EVN Logo" width="200">
+        <h2>Tính Tiền Điện EVN</h2>
+        <label for="kwh">Nhập số kWh:</label>
+        <input type="number" id="kwh" min="1" value="1">
+        <button onclick="calculateElectricity()">Tính tiền</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculateElectricity() {
+            let kwh = parseFloat(document.getElementById("kwh").value);
+            let total = 0;
+            
+            if (kwh <= 50) {
+                total = kwh * 1678;
+            } else if (kwh <= 100) {
+                total = 50 * 1678 + (kwh - 50) * 1734;
+            } else if (kwh <= 200) {
+                total = 50 * 1678 + 50 * 1734 + (kwh - 100) * 2014;
+            } else if (kwh <= 300) {
+                total = 50 * 1678 + 50 * 1734 + 100 * 2014 + (kwh - 200) * 2536;
+            } else if (kwh <= 400) {
+                total = 50 * 1678 + 50 * 1734 + 100 * 2014 + 100 * 2536 + (kwh - 300) * 2834;
+            } else {
+                total = 50 * 1678 + 50 * 1734 + 100 * 2014 + 100 * 2536 + 100 * 2834 + (kwh - 400) * 2927;
+            }
+            
+            let envFee = total * 0.03;
+            let vat = (total + envFee) * 0.1;
+            let finalTotal = total + envFee + vat;
+            
+            document.getElementById("result").innerHTML = `
+                Tiền điện: <b>${total.toLocaleString()} VNĐ</b><br>
+                Phí môi trường (3%): <b>${envFee.toLocaleString()} VNĐ</b><br>
+                VAT (10%): <b>${vat.toLocaleString()} VNĐ</b><br>
+                <span style="color: red; font-size: 20px;">Tổng tiền: <b>${finalTotal.toLocaleString()} VNĐ</b></span>
+            `;
+        }
+    </script>
+</body>
+</html>
