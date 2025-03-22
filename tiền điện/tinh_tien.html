@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính Tiền Điện EVN</title>
+
+    <!-- Thẻ meta giúp hiển thị link đẹp khi chia sẻ -->
+    <meta property="og:title" content="Tính Tiền Điện EVN - Web của Huấn">
+    <meta property="og:description" content="Công cụ tính tiền điện nhanh gọn, chuẩn xác theo bảng giá EVN.">
+    <meta property="og:image" content="https://v0-simple-link-creation.vercel.app/evn_logo.png">
+    <meta property="og:url" content="https://v0-simple-link-creation.vercel.app">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #0000ff, #00ff00, #ff0000);
+            background-size: 400% 400%;
+            animation: backgroundAnimation 10s infinite linear;
+            text-align: center;
+            margin: 50px;
+            color: black;
+        }
+        @keyframes backgroundAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            display: inline-block;
+            position: relative;
+            text-align: center;
+        }
+        h2, .header, label, .result {
+            color: black;
+        }
+        button {
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="evn_logo.png" alt="EVN Logo" width="200">
+        <h2>Tính Tiền Điện EVN</h2>
+        <div class="header">Web của Huấn</div>
+        <label for="kwh">Nhập số kWh:</label>
+        <input type="number" id="kwh" min="1" placeholder="Nhập số kWh">
+        <button onclick="calculateElectricity()">Tính tiền</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculateElectricity() {
+            let kwhInput = document.getElementById("kwh");
+            let kwh = parseFloat(kwhInput.value);
+            let resultDiv = document.getElementById("result");
+            
+            if (isNaN(kwh) || kwh <= 0) {
+                resultDiv.innerHTML = `<span style="color:red;">Vui lòng nhập số kWh hợp lệ!</span>`;
+                return;
+            }
+            
+            let total = 0;
+            if (kwh <= 50) {
+                total = kwh * 1893;
+            } else if (kwh <= 100) {
+                total = 50 * 1893 + (kwh - 50) * 1956;
+            } else if (kwh <= 200) {
+                total = 50 * 1893 + 50 * 1956 + (kwh - 100) * 2271;
+            } else if (kwh <= 300) {
+                total = 50 * 1893 + 50 * 1956 + 100 * 2271 + (kwh - 200) * 2860;
+            } else if (kwh <= 400) {
+                total = 50 * 1893 + 50 * 1956 + 100 * 2271 + 100 * 2860 + (kwh - 300) * 3197;
+            } else {
+                total = 50 * 1893 + 50 * 1956 + 100 * 2271 + 100 * 2860 + 100 * 3197 + (kwh - 400) * 3302;
+            }
+            
+            let vat = total * 0.08;
+            let finalTotal = total + vat;
+            
+            resultDiv.innerHTML = `
+                Tiền điện: <b>${total.toLocaleString()} VNĐ</b><br>
+                VAT (8%): <b>${vat.toLocaleString()} VNĐ</b><br>
+                <span style="color: red; font-size: 20px;">Tổng tiền: <b>${finalTotal.toLocaleString()} VNĐ</b></span>
+            `;
+        }
+    </script>
+</body>
+</html>
